@@ -1,0 +1,75 @@
+<html>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript">
+    function start(objButton) {
+      //24 digit id for device
+      var deviceID = "";
+      //access token created at particle.io for device
+      var accessToken = "";
+      var baseURL = "https://api.particle.io/v1/devices/"
+
+      var varName = "PasswordChangeTo"; // your cloud variable name goes here
+      requestURL = baseURL + deviceID + "/" + varName + "/?access_token=" + accessToken;
+      $.getJSON(requestURL, function(json) {
+        document.getElementById("PasswordChangeTo").innerHTML = json.result;
+      });
+
+      var varName = "is_Open";  // this is another cloud variable name
+      requestURL = baseURL + deviceID + "/" + varName + "/?access_token=" + accessToken;
+      $.getJSON(requestURL, function(json) {
+        document.getElementById("is_Open").innerHTML = json.result;
+      });
+
+      var varName = "passwordCheck";  // this is another cloud variable name
+      requestURL = baseURL + deviceID + "/" + varName + "/?access_token=" + accessToken;
+      $.getJSON(requestURL, function(json) {
+        document.getElementById("passwordCheck").innerHTML = json.result;
+
+      //sets actions with correct device id and token
+      document.getElementById("unlockForm").action =
+      "https://api.particle.io/v1/devices/" + deviceID + "/cF_lock?access_token=" + accessToken;
+
+      document.getElementById("lockForm").action =
+      "https://api.particle.io/v1/devices/" + deviceID + "/cF_lock?access_token=" + accessToken;
+
+      document.getElementById("changePassForm").action =
+      "https://api.particle.io/v1/devices/" + deviceID + "/cF_lock?access_token=" + accessToken;
+
+      document.getElementById("newPassForm").action =
+      "https://api.particle.io/v1/devices/" + deviceID + "/cF_lock?access_token=" + accessToken;
+      });
+    }
+</script>
+  <body>
+    Cloud Controlled Lock. <b>For Particle Proton Only.</b>
+    <br> Current State: <span id="is_Open"></span>
+    <br> <button id="connectbutton" onclick="start()">Refresh Data</button>
+
+    <form id= "unlockForm" method="POST">
+      <br> <b>Unlock </b> <br>
+      Password: 
+      <input type="password" name="PasswordIn"> <br>
+      <input type="submit" value="Unlock">
+    </form>
+
+    <form id= "lockForm" method="POST">
+      <b>Lock </b> <br>
+      <input type="submit" value="Lock">
+    </form>
+
+    <form id="changPassForm" method="POST">
+      <b>Change Password </b> <br>
+      Password: 
+      <input type="password" name="PasswordIn"> <br>
+      <input type="submit" value="Submit">
+    </form>
+
+    <form id="newPassForm" method="POST">
+      New Password: 
+      <input type="password" name="PasswordIn"><br>
+      <input type="submit" value="Submit">
+    </form>
+      
+  </form>
+  </body>
+</html>
